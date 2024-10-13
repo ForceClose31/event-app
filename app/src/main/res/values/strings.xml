@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Submission Event Dicoding</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="home">Home</string>
+    <string name="active_events">Active Events</string>
+    <string name="completed_events">Completed Events</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="buka_link_acara">Buka Link Acara</string>
+</resources>
