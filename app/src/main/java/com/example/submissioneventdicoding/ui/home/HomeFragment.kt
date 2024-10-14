@@ -14,6 +14,7 @@ import com.example.submissioneventdicoding.R
 import com.example.submissioneventdicoding.adapter.EventAdapter
 import com.example.submissioneventdicoding.api.RetrofitClient
 import com.example.submissioneventdicoding.model.EventResponse
+import com.example.submissioneventdicoding.ui.event.EventDetailFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,21 +48,28 @@ class HomeFragment : Fragment() {
     private fun loadEventData() {
         showLoading(true)
 
-        // Mengambil Event Aktif
         RetrofitClient.instance.getActiveEvents(1).enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
                 if (response.isSuccessful) {
-                    val activeEvents = response.body()?.listEvents ?: emptyList()
+                    val activeEvents = response.body()?.listEvents?.take(5) ?: emptyList()
                     Log.d("HomeFragment", "Active Events: $activeEvents")
                     activeEventAdapter = EventAdapter(activeEvents) { event ->
-                        // Handle event click here
+                        val eventDetailFragment = EventDetailFragment()
+                        val bundle = Bundle()
+                        bundle.putParcelable("event", event)
+                        eventDetailFragment.arguments = bundle
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, eventDetailFragment)
+                            .addToBackStack(null)
+                            .commit()
                     }
                     rvActiveEvents.adapter = activeEventAdapter
                 } else {
                     Log.e("HomeFragment", "Error fetching active events: ${response.code()}")
                     showErrorToast()
                 }
-                showLoading(false) // Pindahkan ke sini untuk menampilkan loading hanya setelah respons diterima
+                showLoading(false)
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
@@ -71,21 +79,28 @@ class HomeFragment : Fragment() {
             }
         })
 
-        // Mengambil Event Selesai
         RetrofitClient.instance.getCompletedEvents(0).enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
                 if (response.isSuccessful) {
-                    val completedEvents = response.body()?.listEvents ?: emptyList()
+                    val completedEvents = response.body()?.listEvents?.take(5) ?: emptyList()
                     Log.d("HomeFragment", "Completed Events: $completedEvents")
                     completedEventAdapter = EventAdapter(completedEvents) { event ->
-                        // Handle event click here
+                        val eventDetailFragment = EventDetailFragment()
+                        val bundle = Bundle()
+                        bundle.putParcelable("event", event)
+                        eventDetailFragment.arguments = bundle
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, eventDetailFragment)
+                            .addToBackStack(null)
+                            .commit()
                     }
                     rvCompletedEvents.adapter = completedEventAdapter
                 } else {
                     Log.e("HomeFragment", "Error fetching completed events: ${response.code()}")
                     showErrorToast()
                 }
-                showLoading(false) // Pindahkan ke sini untuk menampilkan loading hanya setelah respons diterima
+                showLoading(false)
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {

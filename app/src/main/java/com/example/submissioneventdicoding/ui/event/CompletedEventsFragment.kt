@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,7 @@ class CompletedEventsFragment : Fragment() {
 
     private lateinit var completedEventAdapter: EventAdapter
     private lateinit var rvCompletedEvents: RecyclerView
+    private lateinit var searchView: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,22 +33,68 @@ class CompletedEventsFragment : Fragment() {
         rvCompletedEvents = view.findViewById(R.id.rv_completed_events)
         rvCompletedEvents.layoutManager = LinearLayoutManager(context)
 
+        searchView = view.findViewById(R.id.search_view)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    searchEvents(query)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+
         loadCompletedEvents()
 
         return view
     }
 
     private fun loadCompletedEvents() {
-        val activeStatus = 0
-        val url = "https://event-api.dicoding.dev/events?active=$activeStatus"
-        Log.d("API Request", "Fetching events from URL: $url")
-        RetrofitClient.instance.getCompletedEvents(activeStatus).enqueue(object : Callback<EventResponse> {
+        RetrofitClient.instance.getCompletedEvents(0).enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
                 if (response.isSuccessful) {
                     val completedEvents = response.body()?.listEvents ?: emptyList()
                     Log.d("CompletedEvents", "Events fetched: $completedEvents")
                     completedEventAdapter = EventAdapter(completedEvents) { event ->
-                        // Handle item click
+                        val eventDetailFragment = EventDetailFragment()
+                        val bundle = Bundle()
+                        bundle.putParcelable("event", event)
+                        eventDetailFragment.arguments = bundle
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, eventDetailFragment)
+                            .addToBackStack(null)
+                            .commit()
+                    }
+                    rvCompletedEvents.adapter = completedEventAdapter
+                } else {
+                    Toast.makeText(requireContext(), "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<EventResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+    private fun searchEvents(query: String) {
+        RetrofitClient.instance.searchEvents(keyword = query).enqueue(object : Callback<EventResponse> {
+            override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
+                if (response.isSuccessful) {
+                    val searchResults = response.body()?.listEvents ?: emptyList()
+                    completedEventAdapter = EventAdapter(searchResults) { event ->
+                        val eventDetailFragment = EventDetailFragment()
+                        val bundle = Bundle()
+                        bundle.putParcelable("event", event)
+                        eventDetailFragment.arguments = bundle
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, eventDetailFragment)
+                            .addToBackStack(null)
+                            .commit()
                     }
                     rvCompletedEvents.adapter = completedEventAdapter
                 } else {

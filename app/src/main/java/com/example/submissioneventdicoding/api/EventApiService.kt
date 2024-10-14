@@ -11,4 +11,11 @@ interface EventApiService {
 
     @GET("/events")
     fun getCompletedEvents(@Query("active") active: Int): Call<EventResponse>
+
+    @GET("/events")
+    fun searchEvents(
+        @Query("active") active: Int = -1,
+        @Query("q") keyword: String
+    ): Call<EventResponse>
+
 }

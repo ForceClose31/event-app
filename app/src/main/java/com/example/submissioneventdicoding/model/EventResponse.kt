@@ -16,8 +16,8 @@ data class Event(
     val ownerName: String,
     val beginTime: String,
     val quota: Int,
-    val registrant: Int, // Pastikan ini adalah Int
+    val registrant: Int,
     val description: String,
     val link: String,
-    val otherField: String // Jika ada field lain
+    val otherField: String
 ) : Parcelable

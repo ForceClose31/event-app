@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.submissioneventdicoding.R
 import com.example.submissioneventdicoding.model.Event
+import android.text.Html
+import android.text.method.LinkMovementMethod
+
 
 class EventDetailFragment : Fragment() {
 
@@ -67,7 +70,9 @@ class EventDetailFragment : Fragment() {
         eventTime.text = "Waktu: ${event.beginTime}"
         val remainingQuota = event.quota - event.registrant
         eventQuota.text = "Sisa Kuota: $remainingQuota"
-        eventDescription.text = event.description
+        val descriptionHtml = event.description
+        eventDescription.text = Html.fromHtml(descriptionHtml, Html.FROM_HTML_MODE_LEGACY)
+        eventDescription.movementMethod = LinkMovementMethod.getInstance()
 
         progressBar.visibility = View.GONE
     }
