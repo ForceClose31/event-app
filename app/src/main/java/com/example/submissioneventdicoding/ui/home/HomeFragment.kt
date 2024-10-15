@@ -23,7 +23,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var activeEventAdapter: EventAdapter
     private lateinit var completedEventAdapter: EventAdapter
-    private lateinit var progressBar: ProgressBar
+    private lateinit var progressBarComplecated: ProgressBar
+    private lateinit var progressBarActive: ProgressBar
     private lateinit var rvActiveEvents: RecyclerView
     private lateinit var rvCompletedEvents: RecyclerView
 
@@ -33,7 +34,8 @@ class HomeFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        progressBar = view.findViewById(R.id.progress)
+        progressBarComplecated = view.findViewById(R.id.progress_completed)
+        progressBarActive = view.findViewById(R.id.progress_activated)
         rvActiveEvents = view.findViewById(R.id.rv_active_events)
         rvCompletedEvents = view.findViewById(R.id.rv_completed_events)
 
@@ -46,7 +48,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadEventData() {
-        showLoading(true)
+        showLoadingActive(true)
 
         RetrofitClient.instance.getActiveEvents(1).enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
@@ -66,18 +68,21 @@ class HomeFragment : Fragment() {
                     }
                     rvActiveEvents.adapter = activeEventAdapter
                 } else {
+                    showLoadingActive(false)
                     Log.e("HomeFragment", "Error fetching active events: ${response.code()}")
                     showErrorToast()
                 }
-                showLoading(false)
+                showLoadingActive(false)
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
-                showLoading(false)
+                showLoadingActive(false)
                 Log.e("HomeFragment", "Failure fetching active events", t)
                 showErrorToast()
             }
         })
+
+        showLoadingCompleted(true)
 
         RetrofitClient.instance.getCompletedEvents(0).enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
@@ -97,22 +102,27 @@ class HomeFragment : Fragment() {
                     }
                     rvCompletedEvents.adapter = completedEventAdapter
                 } else {
+                    showLoadingCompleted(false)
                     Log.e("HomeFragment", "Error fetching completed events: ${response.code()}")
                     showErrorToast()
                 }
-                showLoading(false)
+                showLoadingCompleted(false)
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
-                showLoading(false)
+                showLoadingCompleted(false)
                 Log.e("HomeFragment", "Failure fetching completed events", t)
                 showErrorToast()
             }
         })
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    private fun showLoadingCompleted(isLoading: Boolean) {
+        progressBarComplecated.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showLoadingActive(isLoading: Boolean) {
+        progressBarActive.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun showErrorToast() {

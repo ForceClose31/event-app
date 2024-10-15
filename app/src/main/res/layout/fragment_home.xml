@@ -10,11 +10,10 @@
         android:orientation="vertical">
 
         <ProgressBar
-            android:id="@+id/progress"
+            android:id="@+id/progress_activated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+            android:layout_gravity="center" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -30,6 +29,12 @@
             android:layout_marginBottom="16dp"
             android:background="@color/purple_700"
             android:nestedScrollingEnabled="false" />
+
+        <ProgressBar
+            android:id="@+id/progress_completed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <TextView
             android:layout_width="wrap_content"
