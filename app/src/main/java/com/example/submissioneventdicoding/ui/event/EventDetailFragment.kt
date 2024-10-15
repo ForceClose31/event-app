@@ -1,4 +1,5 @@
 package com.example.submissioneventdicoding.ui.event
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
@@ -10,27 +11,33 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.submissioneventdicoding.R
 import com.example.submissioneventdicoding.model.Event
+import com.example.submissioneventdicoding.database.AppDatabase
+import com.example.submissioneventdicoding.database.FavoriteEventEntity
+import com.example.submissioneventdicoding.repository.EventRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import android.text.Html
 import android.text.method.LinkMovementMethod
-
 
 class EventDetailFragment : Fragment() {
 
     private lateinit var event: Event
     private lateinit var progressBar: ProgressBar
+    private lateinit var repository: EventRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_event_detail, container, false)
-
         event = arguments?.getParcelable("event") ?: Event("", "", "", "", 0, 0, "", "", "")
-
         val eventImage: ImageView = view.findViewById(R.id.event_image_detail)
         val eventName: TextView = view.findViewById(R.id.event_name_detail)
         val eventOwner: TextView = view.findViewById(R.id.event_owner)
@@ -38,7 +45,11 @@ class EventDetailFragment : Fragment() {
         val eventQuota: TextView = view.findViewById(R.id.event_quota)
         val eventDescription: TextView = view.findViewById(R.id.event_description)
         val btnLink: Button = view.findViewById(R.id.btn_open_link)
+        val btnFavorite: Button = view.findViewById(R.id.btn_favorite)
         progressBar = view.findViewById(R.id.progress_bar)
+
+        val db = AppDatabase.getDatabase(requireContext())
+        repository = EventRepository(db)
 
         loadEventDetails(eventImage, eventName, eventOwner, eventTime, eventQuota, eventDescription)
 
@@ -46,6 +57,25 @@ class EventDetailFragment : Fragment() {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(event.link))
             startActivity(browserIntent)
         }
+
+        btnFavorite.setOnClickListener {
+            val favoriteEvent = FavoriteEventEntity(event.id, event.name, event.beginTime, event.description)
+            CoroutineScope(Dispatchers.IO).launch {
+                val favorites = repository.getAllFavorites()
+                if (favorites.any { it.id == event.id }) {
+                    repository.removeFavorite(event.id)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    repository.addFavorite(favoriteEvent)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
 
         return view
     }

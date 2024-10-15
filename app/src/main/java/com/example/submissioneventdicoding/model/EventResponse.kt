@@ -11,13 +11,13 @@ data class EventResponse(
 
 @Parcelize
 data class Event(
-    val imageLogo: String,
+    val id: String,
     val name: String,
     val ownerName: String,
     val beginTime: String,
     val quota: Int,
     val registrants: Int,
+    val imageLogo: String,
     val description: String,
-    val link: String,
-    val otherField: String
+    val link: String
 ) : Parcelable

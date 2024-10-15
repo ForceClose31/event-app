@@ -10,4 +10,5 @@
     <string name="buka_link_acara">Buka Link Acara</string>
     <string name="title_active_events">Active Event</string>
     <string name="title_completed_events">Complete Event\n</string>
+    <string name="tambah_favorite">tambah favorite</string>
 </resources>
