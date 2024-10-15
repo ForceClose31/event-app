@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ class CompletedEventsFragment : Fragment() {
 
     private lateinit var completedEventAdapter: EventAdapter
     private lateinit var rvCompletedEvents: RecyclerView
+    private lateinit var progressBar: ProgressBar
     private lateinit var searchView: SearchView
 
     override fun onCreateView(
@@ -30,6 +32,7 @@ class CompletedEventsFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_completed_events, container, false)
 
+        progressBar = view.findViewById(R.id.progress_completed)
         rvCompletedEvents = view.findViewById(R.id.rv_completed_events)
         rvCompletedEvents.layoutManager = LinearLayoutManager(context)
 
@@ -37,7 +40,7 @@ class CompletedEventsFragment : Fragment() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    searchEvents(query)
+                    searchEvents(query, status = 0)
                 }
                 return false
             }
@@ -53,6 +56,7 @@ class CompletedEventsFragment : Fragment() {
     }
 
     private fun loadCompletedEvents() {
+        showLoading(true)
         RetrofitClient.instance.getCompletedEvents(0).enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
                 if (response.isSuccessful) {
@@ -73,15 +77,17 @@ class CompletedEventsFragment : Fragment() {
                 } else {
                     Toast.makeText(requireContext(), "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
+                showLoading(false)
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
+                showLoading(false)
                 Toast.makeText(requireContext(), "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
-    private fun searchEvents(query: String) {
-        RetrofitClient.instance.searchEvents(keyword = query).enqueue(object : Callback<EventResponse> {
+    private fun searchEvents(query: String, status: Int) {
+        RetrofitClient.instance.searchEvents(keyword = query, active = status).enqueue(object : Callback<EventResponse> {
             override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
                 if (response.isSuccessful) {
                     val searchResults = response.body()?.listEvents ?: emptyList()
@@ -100,11 +106,16 @@ class CompletedEventsFragment : Fragment() {
                 } else {
                     Toast.makeText(requireContext(), "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
+                showLoading(false)
             }
 
             override fun onFailure(call: Call<EventResponse>, t: Throwable) {
+                showLoading(false)
                 Toast.makeText(requireContext(), "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+    private fun showLoading(isLoading: Boolean) {
+        progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

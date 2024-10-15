@@ -12,17 +12,17 @@ object RetrofitClient {
     private val loggingInterceptor = HttpLoggingInterceptor { message ->
         Log.d("API Request", message)
     }.apply {
-        level = HttpLoggingInterceptor.Level.BODY // Menampilkan body request/response
+        level = HttpLoggingInterceptor.Level.BODY
     }
 
     private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor) // Tambahkan interceptor logging
+        .addInterceptor(loggingInterceptor)
         .build()
 
     val instance: EventApiService by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(okHttpClient) // Menggunakan OkHttpClient yang sudah ditambahkan interceptor
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

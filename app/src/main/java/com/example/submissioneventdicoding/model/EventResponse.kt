@@ -16,7 +16,7 @@ data class Event(
     val ownerName: String,
     val beginTime: String,
     val quota: Int,
-    val registrant: Int,
+    val registrants: Int,
     val description: String,
     val link: String,
     val otherField: String

@@ -68,7 +68,7 @@ class EventDetailFragment : Fragment() {
         eventName.text = event.name
         eventOwner.text = "Penyelenggara: ${event.ownerName}"
         eventTime.text = "Waktu: ${event.beginTime}"
-        val remainingQuota = event.quota - event.registrant
+        val remainingQuota = event.quota - event.registrants
         eventQuota.text = "Sisa Kuota: $remainingQuota"
         val descriptionHtml = event.description
         eventDescription.text = Html.fromHtml(descriptionHtml, Html.FROM_HTML_MODE_LEGACY)
