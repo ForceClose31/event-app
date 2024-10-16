@@ -9,5 +9,7 @@ data class FavoriteEventEntity(
     val name: String,
     val date: String,
     val description: String,
-    val imageLogo: String
+    val imageLogo: String,
+    val quota: Int,
+    val registrants: Int
 )
