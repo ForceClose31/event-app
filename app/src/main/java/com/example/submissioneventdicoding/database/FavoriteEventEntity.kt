@@ -8,5 +8,6 @@ data class FavoriteEventEntity(
     @PrimaryKey val id: String,
     val name: String,
     val date: String,
-    val description: String
+    val description: String,
+    val imageLogo: String
 )

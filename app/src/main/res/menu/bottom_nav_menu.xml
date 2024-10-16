@@ -12,4 +12,8 @@
         android:id="@+id/navigation_completed"
         android:icon="@mipmap/ic_completed"
         android:title="@string/completed_events" />
+    <item
+        android:id="@+id/navigation_favorite"
+        android:icon="@mipmap/ic_completed"
+        android:title="@string/favorite_events" />
 </menu>

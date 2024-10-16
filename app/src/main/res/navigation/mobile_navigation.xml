@@ -10,9 +10,6 @@
         android:name="com.example.submissioneventdicoding.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
-        <action
-            android:id="@+id/action_home_to_event_detail"
-            app:destination="@+id/eventDetailFragment" />
 
     <fragment
         android:id="@+id/navigation_active_events"
@@ -25,4 +22,20 @@
         android:name="com.example.submissioneventdicoding.ui.event.CompletedEventsFragment"
         android:label="@string/title_completed_events"
         tools:layout="@layout/fragment_completed_events" />
+
+    <fragment
+        android:id="@+id/navigation_favorite"
+        android:name="com.example.submissioneventdicoding.ui.favorite.FavoriteEventsFragment"
+        android:label="@string/title_favorite_event"
+        tools:layout="@layout/fragment_favorite_events">
+        <action
+            android:id="@+id/action_favoriteEventsFragment_to_eventDetailFragment"
+            app:destination="@id/eventDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/eventDetailFragment"
+        android:name="com.example.submissioneventdicoding.ui.event.EventDetailFragment"
+        android:label="Event Detail"
+        tools:layout="@layout/fragment_event_detail" />
 </navigation>

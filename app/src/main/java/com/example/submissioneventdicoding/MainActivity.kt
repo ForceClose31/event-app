@@ -3,10 +3,10 @@ package com.example.submissioneventdicoding
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.submissioneventdicoding.R
 import com.example.submissioneventdicoding.ui.home.HomeFragment
 import com.example.submissioneventdicoding.ui.event.ActiveEventsFragment
 import com.example.submissioneventdicoding.ui.event.CompletedEventsFragment
+import com.example.submissioneventdicoding.ui.favorite.FavoriteEventsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home -> selectedFragment = HomeFragment()
                 R.id.navigation_active -> selectedFragment = ActiveEventsFragment()
                 R.id.navigation_completed -> selectedFragment = CompletedEventsFragment()
+                R.id.navigation_favorite -> selectedFragment = FavoriteEventsFragment()
             }
 
             selectedFragment?.let { loadFragment(it) }

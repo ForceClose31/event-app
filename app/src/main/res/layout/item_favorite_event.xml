@@ -5,6 +5,13 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <ImageView
+        android:id="@+id/event_image"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:contentDescription="@string/favorite_events"
+        android:scaleType="centerCrop" />
+
     <TextView
         android:id="@+id/tv_event_name"
         android:layout_width="wrap_content"

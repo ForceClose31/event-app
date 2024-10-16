@@ -31,6 +31,8 @@ class EventDetailFragment : Fragment() {
     private lateinit var event: Event
     private lateinit var progressBar: ProgressBar
     private lateinit var repository: EventRepository
+    private lateinit var btnFavorite: Button
+    private var isFavorite = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +47,7 @@ class EventDetailFragment : Fragment() {
         val eventQuota: TextView = view.findViewById(R.id.event_quota)
         val eventDescription: TextView = view.findViewById(R.id.event_description)
         val btnLink: Button = view.findViewById(R.id.btn_open_link)
-        val btnFavorite: Button = view.findViewById(R.id.btn_favorite)
+        btnFavorite = view.findViewById(R.id.btn_favorite)
         progressBar = view.findViewById(R.id.progress_bar)
 
         val db = AppDatabase.getDatabase(requireContext())
@@ -53,31 +55,63 @@ class EventDetailFragment : Fragment() {
 
         loadEventDetails(eventImage, eventName, eventOwner, eventTime, eventQuota, eventDescription)
 
+        checkFavoriteStatus()
+
         btnLink.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(event.link))
             startActivity(browserIntent)
         }
 
         btnFavorite.setOnClickListener {
-            val favoriteEvent = FavoriteEventEntity(event.id, event.name, event.beginTime, event.description)
-            CoroutineScope(Dispatchers.IO).launch {
-                val favorites = repository.getAllFavorites()
-                if (favorites.any { it.id == event.id }) {
-                    repository.removeFavorite(event.id)
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    repository.addFavorite(favoriteEvent)
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            if (isFavorite) {
+                removeFromFavorites()
+            } else {
+                addToFavorites()
             }
         }
 
-
         return view
+    }
+
+    private fun checkFavoriteStatus() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val favorites = repository.getAllFavorites()
+            isFavorite = favorites.any { it.id == event.id }
+            withContext(Dispatchers.Main) {
+                updateFavoriteButton()
+            }
+        }
+    }
+
+    private fun addToFavorites() {
+        val favoriteEvent = FavoriteEventEntity(event.id, event.name, event.beginTime, event.description, event.imageLogo)
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.addFavorite(favoriteEvent)
+            isFavorite = true
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show()
+                updateFavoriteButton()
+            }
+        }
+    }
+
+    private fun removeFromFavorites() {
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.removeFavorite(event.id)
+            isFavorite = false
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show()
+                updateFavoriteButton()
+            }
+        }
+    }
+
+    private fun updateFavoriteButton() {
+        btnFavorite.text = if (isFavorite) {
+            "Hapus dari Favorite"
+        } else {
+            "Tambah ke Favorite"
+        }
     }
 
     @SuppressLint("SetTextI18n")

@@ -11,6 +11,8 @@ import com.example.submissioneventdicoding.R
 import com.example.submissioneventdicoding.adapter.FavoriteEventAdapter
 import com.example.submissioneventdicoding.database.AppDatabase
 import com.example.submissioneventdicoding.database.FavoriteEventEntity
+import com.example.submissioneventdicoding.ui.event.EventDetailFragment
+import com.example.submissioneventdicoding.model.Event
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,9 +42,35 @@ class FavoriteEventsFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val favorites = db.favoriteEventDao().getAllFavorites()
             withContext(Dispatchers.Main) {
-                favoriteEventAdapter = FavoriteEventAdapter(favorites)
+                favoriteEventAdapter = FavoriteEventAdapter(favorites) { event ->
+                    val eventDetailFragment = EventDetailFragment()
+
+                    val bundle = Bundle().apply {
+                        putParcelable("event", event.toEvent())
+                    }
+                    eventDetailFragment.arguments = bundle
+
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, eventDetailFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
                 recyclerView.adapter = favoriteEventAdapter
             }
         }
     }
+}
+
+fun FavoriteEventEntity.toEvent(): Event {
+    return Event(
+        id = this.id,
+        name = this.name,
+        ownerName = "", 
+        beginTime = this.date,
+        quota = 0, 
+        registrants = 0, 
+        imageLogo = this.imageLogo,
+        description = this.description,
+        link = "" 
+    )
 }
