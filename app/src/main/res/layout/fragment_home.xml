@@ -27,7 +27,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:background="@color/purple_700"
             android:nestedScrollingEnabled="false" />
 
         <ProgressBar
@@ -47,7 +46,6 @@
             android:id="@+id/rv_completed_events"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/purple_500"
             android:layout_weight="1" />
     </LinearLayout>
 </ScrollView>

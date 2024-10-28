@@ -67,8 +67,8 @@ fun FavoriteEventEntity.toEvent(): Event {
         name = this.name,
         ownerName = "", 
         beginTime = this.date,
-        quota = 0, 
-        registrants = 0, 
+        quota = this.quota,
+        registrants = this.registrants,
         imageLogo = this.imageLogo,
         description = this.description,
         link = "" 

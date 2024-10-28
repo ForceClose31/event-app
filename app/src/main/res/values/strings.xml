@@ -13,4 +13,6 @@
     <string name="tambah_favorite">tambah favorite</string>
     <string name="title_favorite_event">Favorite</string>
     <string name="favorite_events">Favorite</string>
+    <string name="setting">Setting</string>
+    <string name="title_settings">Setting</string>
 </resources>

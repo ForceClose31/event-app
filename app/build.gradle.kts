@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor.v4110)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.preference.ktx)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
