@@ -11,5 +11,6 @@ data class FavoriteEventEntity(
     val description: String,
     val imageLogo: String,
     val quota: Int,
-    val registrants: Int
+    val registrants: Int,
+    val link: String
 )

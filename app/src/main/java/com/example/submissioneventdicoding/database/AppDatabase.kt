@@ -7,7 +7,7 @@ import androidx.room.migration.Migration
 import android.content.Context
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [FavoriteEventEntity::class], version = 3)
+@Database(entities = [FavoriteEventEntity::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun favoriteEventDao(): FavoriteEventDao
 
@@ -22,7 +22,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "app_database"
                 )
-                    .addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_2_3, MIGRATION_3_4)
                     .build()
                 INSTANCE = instance
                 instance
@@ -35,5 +35,11 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("ALTER TABLE favorite_events ADD COLUMN registrants INT NOT NULL DEFAULT 0")
             }
         }
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE favorite_events ADD COLUMN link TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
     }
 }

@@ -71,6 +71,6 @@ fun FavoriteEventEntity.toEvent(): Event {
         registrants = this.registrants,
         imageLogo = this.imageLogo,
         description = this.description,
-        link = "" 
+        link = this.link
     )
 }

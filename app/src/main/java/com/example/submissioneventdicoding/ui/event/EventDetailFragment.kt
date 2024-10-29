@@ -84,7 +84,7 @@ class EventDetailFragment : Fragment() {
     }
 
     private fun addToFavorites() {
-        val favoriteEvent = FavoriteEventEntity(event.id, event.name, event.beginTime, event.description, event.imageLogo, event.quota, event.registrants)
+        val favoriteEvent = FavoriteEventEntity(event.id, event.name, event.beginTime, event.description, event.imageLogo, event.quota, event.registrants, event.link)
         CoroutineScope(Dispatchers.IO).launch {
             repository.addFavorite(favoriteEvent)
             isFavorite = true
