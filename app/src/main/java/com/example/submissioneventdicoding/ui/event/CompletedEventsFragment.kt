@@ -69,7 +69,7 @@ class CompletedEventsFragment : Fragment() {
                         eventDetailFragment.arguments = bundle
 
                         requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, eventDetailFragment)
+                            .replace(R.id.nav_host_fragment_activity_main, eventDetailFragment)
                             .addToBackStack(null)
                             .commit()
                     }
@@ -98,7 +98,7 @@ class CompletedEventsFragment : Fragment() {
                         eventDetailFragment.arguments = bundle
 
                         requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, eventDetailFragment)
+                            .replace(R.id.nav_host_fragment_activity_main, eventDetailFragment)
                             .addToBackStack(null)
                             .commit()
                     }

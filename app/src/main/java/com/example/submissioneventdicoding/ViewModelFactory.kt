@@ -1,8 +1,9 @@
-package com.example.submissioneventdicoding.ui.setting
+package com.example.submissioneventdicoding
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.submissioneventdicoding.ui.setting.SettingPreferences
 
 class ViewModelFactory private constructor(
     private val preferences: SettingPreferences,

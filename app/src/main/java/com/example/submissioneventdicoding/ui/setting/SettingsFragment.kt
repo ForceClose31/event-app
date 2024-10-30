@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.submissioneventdicoding.databinding.FragmentSettingsBinding
+import com.example.submissioneventdicoding.MainViewModel
+import com.example.submissioneventdicoding.ViewModelFactory
 
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
