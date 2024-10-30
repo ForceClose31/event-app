@@ -51,7 +51,7 @@ class FavoriteEventsFragment : Fragment() {
                     eventDetailFragment.arguments = bundle
 
                     requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.nav_host_fragment_activity_main, eventDetailFragment)
+                        .replace(R.id.nav_container, eventDetailFragment)
                         .addToBackStack(null)
                         .commit()
                 }
