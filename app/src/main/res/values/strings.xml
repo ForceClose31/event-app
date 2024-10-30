@@ -15,4 +15,6 @@
     <string name="favorite_events">Favorite</string>
     <string name="setting">Setting</string>
     <string name="title_settings">Setting</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="pilih_tema">Pilih Tema</string>
 </resources>
