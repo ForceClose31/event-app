@@ -13,6 +13,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.submissioneventdicoding.R
 import com.example.submissioneventdicoding.model.Event
@@ -40,6 +41,7 @@ class EventDetailFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_event_detail, container, false)
         event = arguments?.getParcelable("event") ?: Event("", "", "", "", 0, 0, "", "", "")
+
         val eventImage: ImageView = view.findViewById(R.id.event_image_detail)
         val eventName: TextView = view.findViewById(R.id.event_name_detail)
         val eventOwner: TextView = view.findViewById(R.id.event_owner)
@@ -69,6 +71,7 @@ class EventDetailFragment : Fragment() {
                 addToFavorites()
             }
         }
+
 
         return view
     }
